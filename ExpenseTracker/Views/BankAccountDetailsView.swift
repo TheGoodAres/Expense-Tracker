@@ -9,11 +9,14 @@ import SwiftUI
 import CoreData
 
 struct BankAccountDetailsView: View {
-    @ObservedObject var viewModel: BankAccountViewModel
+    @ObservedObject var viewModel: BankAccountDetailsViewModel
     var body: some View {
         VStack {
             Text(viewModel.bankAccount.sanitisedName)
             Text(viewModel.bankAccount.type.rawValue)
+            Text("Initial Balance: \(viewModel.bankAccount.initialBalance.formatted()) £")
+            Text("Current Balanace: \(viewModel.bankAccount.currentBalance.formatted()) £")
+            
             List {
                 ForEach(viewModel.transactions) {transaction in
                     Text((transaction.date?.formatted())!)
@@ -23,7 +26,7 @@ struct BankAccountDetailsView: View {
     }
 }
 
-class BankAccountViewModel: NSObject, ObservableObject {
+class BankAccountDetailsViewModel: NSObject, ObservableObject {
     @Published var transactions: [Transaction] = []
     var bankAccount: BankAccount
     let storageProvider: StorageProvider
@@ -48,7 +51,7 @@ class BankAccountViewModel: NSObject, ObservableObject {
     }
 }
 
-extension BankAccountViewModel : NSFetchedResultsControllerDelegate {
+extension BankAccountDetailsViewModel : NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         transactions = controller.fetchedObjects as? [Transaction] ?? []
     }

@@ -6,13 +6,49 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct ViewTransactions: View {
+    @ObservedObject var viewModel: ViewTransactionsModel
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        List {
+            ForEach(viewModel.transactions) { transaction in
+                HStack {
+                    VStack {
+                        Text(transaction.merchant ?? "No Merchant")
+                        Text("\(transaction.amount.formatted()) £")
+                    }
+                    Spacer()
+                    Text(transaction.category?.name ?? "No name category")
+                    Spacer()
+                    Text(transaction.date?.formatted() ?? "No date") }
+                
+                
+            }
+        }
     }
 }
 
-#Preview {
-    ViewTransactions()
+class ViewTransactionsModel: NSObject, ObservableObject {
+    @Published var transactions = [Transaction]()
+    let storageProvider: StorageProvider
+    private let fetchResultsControler: NSFetchedResultsController<Transaction>
+    init(storageProvider: StorageProvider) {
+        self.storageProvider = storageProvider
+
+        let fetchRequest: NSFetchRequest<Transaction> = Transaction.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \Transaction.date, ascending: false)]
+        self.fetchResultsControler = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: storageProvider.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        super.init()
+
+        fetchResultsControler.delegate = self
+        try! fetchResultsControler.performFetch()
+        transactions = fetchResultsControler.fetchedObjects ?? []
+    }
+}
+
+extension ViewTransactionsModel: NSFetchedResultsControllerDelegate {
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        transactions = controller.fetchedObjects as? [Transaction] ?? []
+    }
 }

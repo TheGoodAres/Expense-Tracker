@@ -6,13 +6,24 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct SettingsView: View {
+    @EnvironmentObject var storageProvider: StorageProvider
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack {
+            Form {
+                Section("Settings") {
+                    List {
+                        NavigationLink(destination: BankAccountsView(viewModel: BankAccountsViewModel(storageProvider: storageProvider))) {
+                            Text("Bank Accounts")
+                        }
+
+                    }
+                }
+            }
+        }
     }
 }
 
-#Preview {
-    SettingsView()
-}
+

@@ -6,3 +6,15 @@
 //
 
 import Foundation
+import CoreData
+
+extension Transaction {
+    var type: TransactionType {
+        get {
+            return TransactionType(rawValue: typeRaw ?? "") ?? .expense
+        }
+        set {
+            typeRaw = newValue.rawValue
+        }
+    }
+}

@@ -10,9 +10,9 @@ import Foundation
 
 extension BankAccount {
 
-    var type: bankAccountType {
+    var type: BankAccountType {
         get {
-            return bankAccountType(rawValue: typeRaw ?? "") ?? .debit
+            return BankAccountType(rawValue: typeRaw ?? "") ?? .debit
         }
 
         set {
