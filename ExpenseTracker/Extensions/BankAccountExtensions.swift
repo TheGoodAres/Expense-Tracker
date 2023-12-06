@@ -23,5 +23,7 @@ extension BankAccount {
     var sanitisedName: String {
         name ?? "No name"
     }
-
+    var sanitisedRawType: String {
+        typeRaw ?? "No Type"
+    }
 }

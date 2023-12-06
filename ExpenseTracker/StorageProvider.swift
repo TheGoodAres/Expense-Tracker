@@ -24,15 +24,17 @@ class StorageProvider: ObservableObject {
 }
 
 extension StorageProvider {
-    func addTransaction(bankAccount: BankAccount, type: TransactionType, category: Category, amount: Double, date: Date, merchantName: String, note: String) {
+    func addTransaction(bankAccount: BankAccount, type: TransactionType, category: Category, amount: Double, date: Date, merchantName: String, note: String, categoryOn: Bool) {
         let transaction = Transaction(context: persistentContainer.viewContext)
         transaction.bankAccount = bankAccount
         transaction.type = type
-        transaction.category = category
+        if categoryOn {
+            transaction.category = category
+        }
         transaction.amount = amount
         transaction.date = date
         transaction.merchant = merchantName
-        
+
         do {
             try persistentContainer.viewContext.save()
         } catch {
@@ -41,10 +43,11 @@ extension StorageProvider {
         }
 
     }
-    func addBankAccount(name: String, initialBalance: Double) {
+    func addBankAccount(name: String, initialBalance: Double, type: String) {
         let bankAccount = BankAccount(context: persistentContainer.viewContext)
         bankAccount.name = name
         bankAccount.initialBalance = initialBalance
+        bankAccount.typeRaw = type
         do {
             try persistentContainer.viewContext.save()
         } catch {

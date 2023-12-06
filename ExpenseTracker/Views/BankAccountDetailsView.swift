@@ -19,7 +19,7 @@ struct BankAccountDetailsView: View {
             
             List {
                 ForEach(viewModel.transactions) {transaction in
-                    Text((transaction.date?.formatted())!)
+                    SmallTransactionView(transaction: transaction)
                 }
             }
         }

@@ -8,11 +8,24 @@
 import SwiftUI
 
 struct SmallTransactionView: View {
+    @EnvironmentObject var storageProvider: StorageProvider
+    var transaction: Transaction
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationLink(destination: TransactionDetailsView(viewModel: TransactionDetailsViewModel(storageProvider: storageProvider, transaction: transaction))) {
+            HStack {
+                VStack(alignment: .leading) {
+                    Text(transaction.merchant ?? "No Merchant")
+                        .font(.headline)
+                    Text("\(transaction.amount.formatted()) £")
+                        .font(.subheadline)
+                }
+                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                Spacer()
+                Text(transaction.category?.name ?? "No name category")
+                Spacer()
+                Text(transaction.sanitisedDate)
+            }
+        }
     }
 }
 
-#Preview {
-    SmallTransactionView()
-}

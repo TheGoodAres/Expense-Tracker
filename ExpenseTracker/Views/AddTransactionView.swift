@@ -105,7 +105,8 @@ struct AddTransactionView: View {
 
 
                 Button("Submit") {
-                    viewModel.storageProvider.addTransaction(bankAccount: bankAccount!, type: type, category: category!, amount: Double(transactionAmount) ?? 0.0, date: transactionDate, merchantName: transactionMerchant, note: transactionNote)
+                    viewModel.storageProvider.addTransaction(bankAccount: bankAccount!, type: type, category: category!, amount: Double(transactionAmount) ?? 0.0, date: transactionDate, merchantName: transactionMerchant, note: transactionNote, categoryOn: categoryOn
+                    )
                     dismiss()
 
                 }

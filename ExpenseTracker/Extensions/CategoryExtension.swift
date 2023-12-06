@@ -6,3 +6,8 @@
 //
 
 import Foundation
+extension Category {
+    var sanitisedName: String {
+        name ?? "No Category"
+    }
+}

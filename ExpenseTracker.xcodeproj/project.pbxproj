@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D40A21522B1F82AA00EFABF2 /* CategoryExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D40A21512B1F82AA00EFABF2 /* CategoryExtension.swift */; };
+		D40A21542B1F84F000EFABF2 /* TransactionDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D40A21532B1F84F000EFABF2 /* TransactionDetailsView.swift */; };
+		D40A21562B20BC0B00EFABF2 /* SmallTransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D40A21552B20BC0B00EFABF2 /* SmallTransactionView.swift */; };
 		D42A78A72B1271F100D0E87F /* StorageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42A78A62B1271F100D0E87F /* StorageProvider.swift */; };
 		D438AD422B1BC3DD009C9C8E /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = D438AD412B1BC3DD009C9C8E /* Types.swift */; };
 		D438AD442B1BD0E1009C9C8E /* BankAccountExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D438AD432B1BD0E1009C9C8E /* BankAccountExtensions.swift */; };
@@ -26,6 +29,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D40A21512B1F82AA00EFABF2 /* CategoryExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryExtension.swift; sourceTree = "<group>"; };
+		D40A21532B1F84F000EFABF2 /* TransactionDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDetailsView.swift; sourceTree = "<group>"; };
+		D40A21552B20BC0B00EFABF2 /* SmallTransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallTransactionView.swift; sourceTree = "<group>"; };
 		D42A78A62B1271F100D0E87F /* StorageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageProvider.swift; sourceTree = "<group>"; };
 		D438AD412B1BC3DD009C9C8E /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 		D438AD432B1BD0E1009C9C8E /* BankAccountExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankAccountExtensions.swift; sourceTree = "<group>"; };
@@ -70,6 +76,7 @@
 			children = (
 				D438AD432B1BD0E1009C9C8E /* BankAccountExtensions.swift */,
 				D4FAB60C2B1BE78E00A18E00 /* TransactionExtensions.swift */,
+				D40A21512B1F82AA00EFABF2 /* CategoryExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -125,6 +132,8 @@
 				D48F8C332B1C8BB900DE995C /* BankAccountsView.swift */,
 				D4DF9D912B1D50530049D62B /* AddBankAccountView.swift */,
 				D467C3A32B1E791F003F1D82 /* DashboardView.swift */,
+				D40A21532B1F84F000EFABF2 /* TransactionDetailsView.swift */,
+				D40A21552B20BC0B00EFABF2 /* SmallTransactionView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -201,6 +210,7 @@
 			files = (
 				D4FAB6102B1BF14B00A18E00 /* ViewTransactions.swift in Sources */,
 				D4FAB60B2B1BE4EB00A18E00 /* BankAccountDetailsView.swift in Sources */,
+				D40A21562B20BC0B00EFABF2 /* SmallTransactionView.swift in Sources */,
 				D4D9781C2B0817D60029EB65 /* ContentView.swift in Sources */,
 				D467C3A42B1E791F003F1D82 /* DashboardView.swift in Sources */,
 				D4BDFABE2B121BD600E75814 /* ExpenseTracker.xcdatamodeld in Sources */,
@@ -211,7 +221,9 @@
 				D438AD422B1BC3DD009C9C8E /* Types.swift in Sources */,
 				D4DF9D922B1D50530049D62B /* AddBankAccountView.swift in Sources */,
 				D48F8C362B1C997400DE995C /* AddTransactionView.swift in Sources */,
+				D40A21522B1F82AA00EFABF2 /* CategoryExtension.swift in Sources */,
 				D438AD442B1BD0E1009C9C8E /* BankAccountExtensions.swift in Sources */,
+				D40A21542B1F84F000EFABF2 /* TransactionDetailsView.swift in Sources */,
 				D42A78A72B1271F100D0E87F /* StorageProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
