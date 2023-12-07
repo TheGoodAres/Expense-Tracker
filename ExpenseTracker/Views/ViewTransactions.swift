@@ -10,23 +10,11 @@ import CoreData
 
 struct ViewTransactions: View {
     @ObservedObject var viewModel: ViewTransactionsModel
+    
     var body: some View {
         NavigationStack {
             List {
                 ForEach(viewModel.transactions) { transaction in
-//                    NavigationLink(destination: TransactionDetailsView(viewModel: TransactionDetailsViewModel(storageProvider: viewModel.storageProvider, transaction: transaction))) {
-//                        HStack {
-//                            VStack {
-//                                Text(transaction.merchant ?? "No Merchant")
-//                                Text("\(transaction.amount.formatted()) £")
-//                            }
-//                            Spacer()
-//                            Text(transaction.category?.name ?? "No name category")
-//                            Spacer()
-//                            Text(transaction.sanitisedDate) }
-//
-//
-//                    }
                     SmallTransactionView(transaction: transaction)
                 }
             }
@@ -36,6 +24,7 @@ struct ViewTransactions: View {
 
 class ViewTransactionsModel: NSObject, ObservableObject {
     @Published var transactions = [Transaction]()
+    
     let storageProvider: StorageProvider
     private let fetchResultsControler: NSFetchedResultsController<Transaction>
     init(storageProvider: StorageProvider) {
@@ -54,6 +43,9 @@ class ViewTransactionsModel: NSObject, ObservableObject {
 
 extension ViewTransactionsModel: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        transactions = controller.fetchedObjects as? [Transaction] ?? []
+        DispatchQueue.main.async {
+            
+            self.transactions = controller.fetchedObjects as? [Transaction] ?? []
+        }
     }
 }

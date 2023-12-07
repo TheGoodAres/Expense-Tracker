@@ -29,6 +29,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D4076ACA2B22451E001BD8BE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		D40A21512B1F82AA00EFABF2 /* CategoryExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryExtension.swift; sourceTree = "<group>"; };
 		D40A21532B1F84F000EFABF2 /* TransactionDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDetailsView.swift; sourceTree = "<group>"; };
 		D40A21552B20BC0B00EFABF2 /* SmallTransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallTransactionView.swift; sourceTree = "<group>"; };
@@ -100,6 +101,7 @@
 		D4D978182B0817D60029EB65 /* ExpenseTracker */ = {
 			isa = PBXGroup;
 			children = (
+				D4076ACA2B22451E001BD8BE /* Info.plist */,
 				D4D978192B0817D60029EB65 /* ExpenseTrackerApp.swift */,
 				D4D9781B2B0817D60029EB65 /* ContentView.swift */,
 				D4FAB60E2B1BF0B000A18E00 /* Views */,
@@ -122,17 +124,33 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		D4FAB60E2B1BF0B000A18E00 /* Views */ = {
+		D4EB794E2B21C349005C5C18 /* AddingViews */ = {
+			isa = PBXGroup;
+			children = (
+				D48F8C352B1C997400DE995C /* AddTransactionView.swift */,
+				D4DF9D912B1D50530049D62B /* AddBankAccountView.swift */,
+			);
+			path = AddingViews;
+			sourceTree = "<group>";
+		};
+		D4EB794F2B21C368005C5C18 /* DetailesViews */ = {
 			isa = PBXGroup;
 			children = (
 				D4FAB60A2B1BE4EB00A18E00 /* BankAccountDetailsView.swift */,
+				D40A21532B1F84F000EFABF2 /* TransactionDetailsView.swift */,
+			);
+			path = DetailesViews;
+			sourceTree = "<group>";
+		};
+		D4FAB60E2B1BF0B000A18E00 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D4EB794F2B21C368005C5C18 /* DetailesViews */,
+				D4EB794E2B21C349005C5C18 /* AddingViews */,
 				D4FAB60F2B1BF14B00A18E00 /* ViewTransactions.swift */,
 				D48F8C312B1C7E5500DE995C /* SettingsView.swift */,
-				D48F8C352B1C997400DE995C /* AddTransactionView.swift */,
 				D48F8C332B1C8BB900DE995C /* BankAccountsView.swift */,
-				D4DF9D912B1D50530049D62B /* AddBankAccountView.swift */,
 				D467C3A32B1E791F003F1D82 /* DashboardView.swift */,
-				D40A21532B1F84F000EFABF2 /* TransactionDetailsView.swift */,
 				D40A21552B20BC0B00EFABF2 /* SmallTransactionView.swift */,
 			);
 			path = Views;
@@ -358,6 +376,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ExpenseTracker/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -396,6 +415,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ExpenseTracker/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;

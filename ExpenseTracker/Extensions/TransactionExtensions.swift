@@ -32,5 +32,10 @@ extension Transaction {
         return dateFormatter.string(from: date ?? Calendar.current.date(byAdding: .year, value: -10, to: .now)!)
         
     }
-    
+    var safeDate: Date {
+        date ?? Date()
+    }
+    var bankAccountName: String {
+        bankAccount?.sanitisedName ?? "Not associated with a bank account"
+    }
 }

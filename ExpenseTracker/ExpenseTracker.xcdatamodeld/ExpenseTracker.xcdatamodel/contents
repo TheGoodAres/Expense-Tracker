@@ -3,9 +3,9 @@
     <entity name="BankAccount" representedClassName="BankAccount" syncable="YES" codeGenerationType="class">
         <attribute name="currentBalance" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="initialBalance" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="name" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="typeRaw" optional="YES" attributeType="String"/>
-        <relationship name="transactions" toMany="YES" deletionRule="Nullify" destinationEntity="Transaction" inverseName="bankAccount" inverseEntity="Transaction"/>
+        <relationship name="transactions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Transaction" inverseName="bankAccount" inverseEntity="Transaction"/>
     </entity>
     <entity name="Category" representedClassName="Category" syncable="YES" codeGenerationType="class">
         <attribute name="name" optional="YES" attributeType="String"/>
@@ -18,8 +18,8 @@
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="merchant" optional="YES" attributeType="String"/>
         <attribute name="note" optional="YES" attributeType="String"/>
-        <attribute name="typeRaw" attributeType="String"/>
-        <relationship name="bankAccount" maxCount="1" deletionRule="Nullify" destinationEntity="BankAccount" inverseName="transactions" inverseEntity="BankAccount"/>
+        <attribute name="typeRaw" optional="YES" attributeType="String"/>
+        <relationship name="bankAccount" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BankAccount" inverseName="transactions" inverseEntity="BankAccount"/>
         <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Category" inverseName="transaction" inverseEntity="Category"/>
     </entity>
 </model>

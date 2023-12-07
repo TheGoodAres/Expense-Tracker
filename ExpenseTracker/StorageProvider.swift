@@ -9,17 +9,23 @@ import Foundation
 import CoreData
 
 class StorageProvider: ObservableObject {
-    let persistentContainer: NSPersistentContainer
+    let persistentContainer: NSPersistentCloudKitContainer
 
     init() {
 
-        persistentContainer = NSPersistentContainer(name: "ExpenseTracker")
+        persistentContainer = NSPersistentCloudKitContainer(name: "ExpenseTracker")
 
+        persistentContainer.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
+        persistentContainer.persistentStoreDescriptions.first?.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+        NotificationCenter.default.addObserver(forName: .NSPersistentStoreRemoteChange, object: persistentContainer.persistentStoreCoordinator, queue: .main, using: remoteStoreChanged)
+        
+        
         persistentContainer.loadPersistentStores(completionHandler: { description, error in
             if let error = error {
                 fatalError("CoreData failed to load with error: \(error)")
             }
         })
+        
     }
 }
 
@@ -35,12 +41,7 @@ extension StorageProvider {
         transaction.date = date
         transaction.merchant = merchantName
 
-        do {
-            try persistentContainer.viewContext.save()
-        } catch {
-            persistentContainer.viewContext.rollback()
-            print("There was an error: \(error)")
-        }
+        save()
 
     }
     func addBankAccount(name: String, initialBalance: Double, type: String) {
@@ -48,12 +49,7 @@ extension StorageProvider {
         bankAccount.name = name
         bankAccount.initialBalance = initialBalance
         bankAccount.typeRaw = type
-        do {
-            try persistentContainer.viewContext.save()
-        } catch {
-            persistentContainer.viewContext.rollback()
-            print("There was an error: \(error)")
-        }
+       save()
     }
 
     func getAllBankAccount() -> [BankAccount] {
@@ -99,12 +95,7 @@ extension StorageProvider {
         transaction2.typeRaw = "expense"
         transaction1.bankAccount = bankAccount
         transaction2.bankAccount = bankAccount1
-        do {
-            try persistentContainer.viewContext.save()
-        } catch {
-            persistentContainer.viewContext.rollback()
-            print("there was an error: \(error)")
-        }
+        save()
     }
 
     func addUniqueBankAccount(accountName: String, context: NSManagedObjectContext) -> Bool {
@@ -123,5 +114,48 @@ extension StorageProvider {
         }
     }
 
+    func save() {
+        if persistentContainer.viewContext.hasChanges{
+            do {
+                
+                try persistentContainer.viewContext.save()
+                print("Success")
+            } catch {
+                persistentContainer.viewContext.rollback()
+                print("There was an error: \(error)")
+            }
+        } else {
+            print("Had no changes")
+        }
+    }
+    
+    func deelet(_ object: NSManagedObject) {
+        objectWillChange.send()
+        persistentContainer.viewContext.delete(object)
+        save()
+    }
+    
+    private func delete(_ fetchRequest: NSFetchRequest<NSFetchRequestResult>) {
+        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        batchDeleteRequest.resultType = .resultTypeObjectIDs
 
+        if let delete = try? persistentContainer.viewContext.execute(batchDeleteRequest) as? NSBatchDeleteResult {
+            let changes = [NSDeletedObjectsKey: delete.result as? [NSManagedObjectID] ?? []]
+            NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [persistentContainer.viewContext])
+        }
+    }
+    func deleteAll() {
+        let request1: NSFetchRequest<NSFetchRequestResult> = BankAccount.fetchRequest()
+        delete(request1)
+
+        let request2: NSFetchRequest<NSFetchRequestResult> = Transaction.fetchRequest()
+        delete(request2)
+        let request3: NSFetchRequest<NSFetchRequestResult> = Category.fetchRequest()
+        save()
+    }
+    
+    func remoteStoreChanged(_ notification: Notification) {
+        objectWillChange.send()
+    }
+    
 }

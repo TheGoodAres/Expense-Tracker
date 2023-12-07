@@ -16,7 +16,7 @@ struct SmallTransactionView: View {
                 VStack(alignment: .leading) {
                     Text(transaction.merchant ?? "No Merchant")
                         .font(.headline)
-                    Text("\(transaction.amount.formatted()) £")
+                    Text("\(transaction.sanitisedAmount.formatted()) £")
                         .font(.subheadline)
                 }
                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)

@@ -52,8 +52,11 @@ class BankAccountDetailsViewModel: NSObject, ObservableObject {
 }
 
 extension BankAccountDetailsViewModel : NSFetchedResultsControllerDelegate {
+    
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        transactions = controller.fetchedObjects as? [Transaction] ?? []
+        DispatchQueue.main.async {
+            self.transactions = controller.fetchedObjects as? [Transaction] ?? []
+        }
     }
 }
 

@@ -154,10 +154,12 @@ class AddTransctionViewModel: NSObject, ObservableObject, NSFetchedResultsContro
     }
 
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        if controller == fetchResultsControllerCategories {
-            categories = fetchResultsControllerCategories.fetchedObjects ?? []
-        } else if controller == fetchResultsControllerBankAccounts {
-            bankAccounts = fetchResultsControllerBankAccounts.fetchedObjects ?? []
+        DispatchQueue.main.async {
+            if controller == self.fetchResultsControllerCategories {
+                self.categories = self.fetchResultsControllerCategories.fetchedObjects ?? []
+            } else if controller == self.fetchResultsControllerBankAccounts {
+                self.bankAccounts = self.fetchResultsControllerBankAccounts.fetchedObjects ?? []
+            }
         }
     }
 }
