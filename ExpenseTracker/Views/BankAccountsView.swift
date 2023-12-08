@@ -22,6 +22,7 @@ struct BankAccountsView: View {
                             Text(bankAccount.name ?? "Not known")
                         }
                     }
+                    .onDelete(perform: viewModel.delete)
                 }
                 HStack {
                     Button {
@@ -30,14 +31,22 @@ struct BankAccountsView: View {
                         Text("Add Data!")
                     }
                     Spacer()
+                    
                     Button {
-                        isShowingAddBankAccountSheet.toggle()
+                        viewModel.storageProvider.deleteAll()
                     } label: {
-                        Text("Add Bank Account")
+                        Text("Delete All")
                     }
                 }
                 .sheet(isPresented: $isShowingAddBankAccountSheet) {
                     AddBankAccountView()
+                }
+            }
+            .toolbar {
+                Button {
+                    isShowingAddBankAccountSheet.toggle()
+                } label: {
+                    Image(systemName: "plus.circle")
                 }
             }
         }
@@ -65,6 +74,13 @@ class BankAccountsViewModel: NSObject, ObservableObject {
 
     func addData() {
         storageProvider.mockBankAccount()
+    }
+    
+    func delete(_ offsets: IndexSet) {
+        for offset in offsets {
+            let item = bankAccounts[offset]
+            storageProvider.delete(item)
+        }
     }
 }
 

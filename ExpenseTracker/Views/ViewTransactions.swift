@@ -17,7 +17,10 @@ struct ViewTransactions: View {
                 ForEach(viewModel.transactions) { transaction in
                     SmallTransactionView(transaction: transaction)
                 }
+                .onDelete(perform: viewModel.delete)
             }
+            .navigationTitle("Transactions")
+            
         }
     }
 }
@@ -38,6 +41,13 @@ class ViewTransactionsModel: NSObject, ObservableObject {
         fetchResultsControler.delegate = self
         try! fetchResultsControler.performFetch()
         transactions = fetchResultsControler.fetchedObjects ?? []
+    }
+    
+    func delete(_ offsets: IndexSet) {
+        for offset in offsets {
+            let item = transactions[offset]
+            storageProvider.delete(item)
+        }
     }
 }
 

@@ -28,8 +28,18 @@ struct AddBankAccountView: View {
                     VStack(alignment: .leading) {
                         Text("Initial Balance")
                             .font(.caption2)
+                        #if os(iOS)
                         TextField("Initial Balance", text: $initialBalance)
+                            .focused($initialBalanceIsActive)
                             .keyboardType(.decimalPad)
+                            .onReceive(Just(initialBalance)) { newValue in
+                                let filtered = newValue.filter { "0123456789.".contains($0) }
+                                if filtered != newValue {
+                                    self.initialBalance = filtered
+                                }
+                            }
+                        #else
+                        TextField("Initial Balance", text: $initialBalance)
                             .focused($initialBalanceIsActive)
                             .onReceive(Just(initialBalance)) { newValue in
                                 let filtered = newValue.filter { "0123456789.".contains($0) }
@@ -37,6 +47,7 @@ struct AddBankAccountView: View {
                                     self.initialBalance = filtered
                                 }
                             }
+                        #endif
                     }
                     Picker("Type", selection: $type) {
                         ForEach(BankAccountType.allCases, id: \.rawValue) { accountType in
@@ -46,7 +57,7 @@ struct AddBankAccountView: View {
                     }
                     Button("Submit") {
                         print("Submit pressed")
-                        if storageProvider.addUniqueBankAccount(accountName: bankAccountName, context: storageProvider.persistentContainer.viewContext) {
+                        if storageProvider.checkUniqueBankAccount(accountName: bankAccountName) {
                             print("New account added: \(bankAccountName)")
                             storageProvider.addBankAccount(name: bankAccountName, initialBalance: Double(initialBalance) ?? 0, type: type.rawValue)
                         } else {

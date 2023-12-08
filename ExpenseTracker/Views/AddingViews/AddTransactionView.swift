@@ -57,7 +57,6 @@ struct AddTransactionView: View {
                     VStack(alignment: .leading, spacing: 0) {
                         Text("Amount")
                         TextField("Amount", text: $transactionAmount)
-                            .keyboardType(.decimalPad)
                             .focused($amountIsActive)
                             .toolbar {
                             ToolbarItemGroup(placement: .keyboard) {
@@ -113,9 +112,7 @@ struct AddTransactionView: View {
                     .disabled(transactionAmount.isEmpty || transactionMerchant.isEmpty)
             }
                 .onAppear {
-                print(viewModel.categories.first?.name ?? "1")
                 category = viewModel.categories.first
-                print(viewModel.bankAccounts.first?.sanitisedName ?? "2")
                 bankAccount = viewModel.bankAccounts.first
 
             }

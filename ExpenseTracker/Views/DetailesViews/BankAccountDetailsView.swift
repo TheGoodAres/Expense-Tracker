@@ -21,6 +21,7 @@ struct BankAccountDetailsView: View {
                 ForEach(viewModel.transactions) {transaction in
                     SmallTransactionView(transaction: transaction)
                 }
+                .onDelete(perform: viewModel.delete)
             }
         }
     }
@@ -48,6 +49,13 @@ class BankAccountDetailsViewModel: NSObject, ObservableObject {
         try! fetchResultsControler.performFetch()
         transactions = fetchResultsControler.fetchedObjects ?? []
 
+    }
+    
+    func delete(_ offsets: IndexSet) {
+        for offset in offsets {
+            let item = transactions[offset]
+            storageProvider.delete(item)
+        }
     }
 }
 

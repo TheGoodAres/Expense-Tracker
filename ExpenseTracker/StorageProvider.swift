@@ -51,6 +51,12 @@ extension StorageProvider {
         bankAccount.typeRaw = type
        save()
     }
+    func addCategory(name: String, parentCategory: Category?) {
+        let category = Category(context: persistentContainer.viewContext)
+        category.name = name
+        category.parentCategory = parentCategory
+        save()
+    }
 
     func getAllBankAccount() -> [BankAccount] {
         let fetchRequest: NSFetchRequest<BankAccount> = BankAccount.fetchRequest()
@@ -98,11 +104,11 @@ extension StorageProvider {
         save()
     }
 
-    func addUniqueBankAccount(accountName: String, context: NSManagedObjectContext) -> Bool {
+    func checkUniqueBankAccount(accountName: String) -> Bool {
         let fetchRequest: NSFetchRequest<BankAccount> = BankAccount.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "name == %@", accountName)
         do {
-            let results = try context.fetch(fetchRequest)
+            let results = try persistentContainer.viewContext.fetch(fetchRequest)
             if results.isEmpty {
                 return true
             } else {
@@ -113,7 +119,21 @@ extension StorageProvider {
             return false
         }
     }
-
+    func checkUniqueCategory(name: String) -> Bool {
+        let fetchRequest: NSFetchRequest<Category> = Category.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "name == %@", name)
+        do {
+            let results = try persistentContainer.viewContext.fetch(fetchRequest)
+            if results.isEmpty {
+                return true
+            } else {
+                return false
+            }
+        } catch {
+            print("There was an error: \(error)")
+            return false
+        }
+    }
     func save() {
         if persistentContainer.viewContext.hasChanges{
             do {
@@ -129,7 +149,7 @@ extension StorageProvider {
         }
     }
     
-    func deelet(_ object: NSManagedObject) {
+    func delete(_ object: NSManagedObject) {
         objectWillChange.send()
         persistentContainer.viewContext.delete(object)
         save()
@@ -147,10 +167,10 @@ extension StorageProvider {
     func deleteAll() {
         let request1: NSFetchRequest<NSFetchRequestResult> = BankAccount.fetchRequest()
         delete(request1)
-
         let request2: NSFetchRequest<NSFetchRequestResult> = Transaction.fetchRequest()
         delete(request2)
         let request3: NSFetchRequest<NSFetchRequestResult> = Category.fetchRequest()
+        delete(request3)
         save()
     }
     

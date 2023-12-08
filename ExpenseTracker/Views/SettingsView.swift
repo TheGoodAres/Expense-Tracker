@@ -18,6 +18,9 @@ struct SettingsView: View {
                         NavigationLink(destination: BankAccountsView(viewModel: BankAccountsViewModel(storageProvider: storageProvider))) {
                             Text("Bank Accounts")
                         }
+                        NavigationLink(destination: CategoriesView(viewModel: CategoriesViewModel(storageProvider: storageProvider))) {
+                            Text("Categories")
+                        }
 
                     }
                 }

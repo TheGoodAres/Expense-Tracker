@@ -10,7 +10,7 @@ import CoreData
 import Combine
 
 struct TransactionDetailsView: View {
-    @Environment(\.editMode) var editMode
+
     @ObservedObject var viewModel: TransactionDetailsViewModel
 
     @State var transactionDate = Date()
@@ -21,108 +21,57 @@ struct TransactionDetailsView: View {
     @State var bankAccount: BankAccount?
     @State var category: Category?
     @State var categoryOn = true
-    @FocusState var amountIsActive: Bool
-    @FocusState var merchantIsActive: Bool
-    @FocusState var noteIsActive: Bool
+    @State var editing = false
 
     var body: some View {
         NavigationStack {
             Form {
-                if (editMode?.wrappedValue.isEditing == false) {
-                    VStack(alignment: .leading) {
-                        Text("Merchant: \(viewModel.transaction.sanitisedMerchant)")
-                        Text("Amount: \(viewModel.transaction.amount)")
-                        Text("Date: \(viewModel.transaction.sanitisedDate)")
-                        Text("Bank Account: \(viewModel.transaction.bankAccountName)")
-                        if let category = viewModel.transaction.category {
-                            Text("Category:\(category.sanitisedName)")
-                        } else {
-                            Text("Uncategorized")
-                        }
-                    }
-                } else {
-                    Section("Add Transaction") {
-
-                        Picker("Bank Account", selection: $bankAccount) {
-                            ForEach(viewModel.bankAccounts) { bankAccount in
-                                Text(bankAccount.sanitisedName).tag(bankAccount as BankAccount?)
+                
+                    if (!editing) {
+                            VStack {
+                                Text("Merchant: \(viewModel.transaction.sanitisedMerchant)")
                             }
-                        }
-                        Picker("Type", selection: $type) {
-                            ForEach(TransactionType.allCases, id: \.rawValue) { type in
-                                Text(type.rawValue.capitalized).tag(type)
+                            VStack{
+                                Text("Amount: \(viewModel.transaction.amount)")
                             }
-                        }
-                        HStack {
-                            Text("Category enabled:")
-                            Spacer()
-                            Button {
-                                categoryOn.toggle()
-                            } label: {
-                                Text(categoryOn ? "On" : "Off")
+                            VStack{
+                                Text("Date: \(viewModel.transaction.sanitisedDate)")
                             }
-                        }
-                        //.tag was require to make the pickers in this view work
-                        Picker("Category", selection: $category) {
-                            ForEach(viewModel.categories) { category in
-                                Text(category.name?.capitalized ?? "No Name").tag(category as Category?)
+                            VStack{
+                                Text("Bank Account: \(viewModel.transaction.bankAccountName)")
                             }
-                        }
-                            .disabled(!categoryOn)
-                        VStack(alignment: .leading, spacing: 0) {
-                            Text("Amount")
-                            TextField("Amount", text: $transactionAmount)
-                                .keyboardType(.decimalPad)
-                                .focused($amountIsActive)
-                                .toolbar {
-                                ToolbarItemGroup(placement: .keyboard) {
-                                    Spacer()
-
-                                    Button("Done") {
-                                        if amountIsActive {
-                                            amountIsActive.toggle()
-                                        }
-                                        if merchantIsActive {
-                                            merchantIsActive.toggle()
-                                        }
-                                        if noteIsActive {
-                                            noteIsActive.toggle()
-                                        }
+                            VStack{
+                                if let category = viewModel.transaction.category {
+                                    Text("Category:\(category.sanitisedName)")
+                                } else {
+                                    Text("Uncategorized")
+                                }
+                            }
+                        if let note = viewModel.transaction.note {
+                            VStack(alignment:.leading){
+                                Text("Note")
+                                Text(note)
+                                    .background {
+                                        Color.primary.opacity(0.1)
                                     }
-                                }
-                            }
-                                .onReceive(Just(transactionAmount)) { newValue in
-                                let filtered = newValue.filter { "0123456789.".contains($0) }
-                                if filtered != newValue {
-                                    self.transactionAmount = filtered
-                                }
+                                    .frame(maxWidth: .infinity)
+                                    .background {
+                                        Color.primary.opacity(0.1)
+                                    }
                             }
                         }
-
-                        DatePicker("Date:", selection: $transactionDate, displayedComponents: [.date])
-                        VStack(alignment: .leading, spacing: 0) {
-                            Text("Merchant Name")
-                                .font(.caption2)
-                            TextField("Merchant Name", text: $transactionMerchant, prompt: Text("Required"))
-                                .focused($merchantIsActive)
-                        }
-
-                        VStack(alignment: .leading, spacing: 0) {
-                            Text("Note")
-                            ZStack {
-                                TextEditor(text: $transactionNote)
-                                    .focused($noteIsActive)
-
-                                Text(transactionNote).opacity(0).padding(.all, 8)
-                            }
-                        }
+                        
+                    } else {
+                            EditTransactionView(transaction: $viewModel.transaction, transactionDate: $transactionDate, transactionMerchant: $transactionMerchant, transactionNote: $transactionNote, type: $type, transactionAmount: $transactionAmount, bankAccount: $bankAccount, category: $category, categoryOn: $categoryOn, bankAccounts: $viewModel.bankAccounts, categories: $viewModel.categories)
+                            
+                        
                     }
-                }
-
-
+                
             }
-                .onChange(of: editMode?.wrappedValue) { oldValue, newValue in
-                if (newValue?.isEditing == false) {
+            .navigationTitle(editing ? "Edit Transaction" : "Transaction Details")
+            .navigationBarTitleDisplayMode(.inline)
+            .onChange(of: editing) { oldValue, newValue in
+                if (editing == false) {
                     viewModel.updateTransaction(bankAccount: bankAccount!, type: type, category: category!, amount: Double(transactionAmount) ?? 0.0, date: transactionDate, merchantName: transactionMerchant, note: transactionNote, categoryOn: categoryOn)
                 } else {
                     let transaction = viewModel.transaction
@@ -141,14 +90,17 @@ struct TransactionDetailsView: View {
                     }
                 }
             }
-                .toolbar {
-                EditButton()
-
+            .toolbar {
+                Button {
+                    editing.toggle()
+                } label: {
+                    Text(editing ? "Done" : "Edit")
+                }
+                
             }
         }
+
     }
-
-
 }
 
 class TransactionDetailsViewModel: NSObject, ObservableObject {
