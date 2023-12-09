@@ -10,18 +10,26 @@ import CoreData
 
 struct ViewTransactions: View {
     @ObservedObject var viewModel: ViewTransactionsModel
-    
+    @State var searchText = ""
     var body: some View {
         NavigationStack {
             List {
-                ForEach(viewModel.transactions) { transaction in
+                ForEach(viewModel.transactions.filter{
+                    if let categoryName = $0.category?.sanitisedName {
+                        $0.bankAccountName.contains(searchText) || $0.sanitisedMerchant.contains(searchText) || String($0.sanitisedAmount).contains(searchText) || $0.sanitisedDate.contains(searchText) || searchText == "" || categoryName.contains(searchText) }
+                    else {
+                        $0.bankAccountName.contains(searchText) || $0.sanitisedMerchant.contains(searchText) || String($0.sanitisedAmount).contains(searchText) || $0.sanitisedDate.contains(searchText) || searchText == ""
+                    }
+                }) { transaction in
                     SmallTransactionView(transaction: transaction)
                 }
                 .onDelete(perform: viewModel.delete)
             }
             .navigationTitle("Transactions")
+            .navigationBarTitleDisplayMode(.inline)
             
         }
+        .searchable(text: $searchText)
     }
 }
 
@@ -33,9 +41,8 @@ class ViewTransactionsModel: NSObject, ObservableObject {
     init(storageProvider: StorageProvider) {
         self.storageProvider = storageProvider
 
-        let fetchRequest: NSFetchRequest<Transaction> = Transaction.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \Transaction.date, ascending: false)]
-        self.fetchResultsControler = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: storageProvider.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        
+        self.fetchResultsControler = storageProvider.getTransactionNSFetchedResultsController()
         super.init()
 
         fetchResultsControler.delegate = self
@@ -46,6 +53,7 @@ class ViewTransactionsModel: NSObject, ObservableObject {
     func delete(_ offsets: IndexSet) {
         for offset in offsets {
             let item = transactions[offset]
+            
             storageProvider.delete(item)
         }
     }

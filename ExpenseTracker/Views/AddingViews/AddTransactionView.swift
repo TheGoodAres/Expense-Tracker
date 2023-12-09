@@ -104,12 +104,19 @@ struct AddTransactionView: View {
 
 
                 Button("Submit") {
-                    viewModel.storageProvider.addTransaction(bankAccount: bankAccount!, type: type, category: category!, amount: Double(transactionAmount) ?? 0.0, date: transactionDate, merchantName: transactionMerchant, note: transactionNote, categoryOn: categoryOn
+                    viewModel.storageProvider.addTransaction(bankAccount: bankAccount!, type: type, category: category, amount: Double(transactionAmount) ?? 0.0, date: transactionDate, merchantName: transactionMerchant, note: transactionNote, categoryOn: categoryOn
                     )
                     dismiss()
 
                 }
-                    .disabled(transactionAmount.isEmpty || transactionMerchant.isEmpty)
+                    .disabled(transactionAmount.isEmpty || transactionMerchant.isEmpty || (viewModel.bankAccounts.isEmpty))
+
+                if(viewModel.bankAccounts.isEmpty) {
+                    Text("There are no bank accounts, please add at least one to be able to add a transaction!")
+                        .font(.caption2)
+                        .foregroundStyle(Color.red)
+                }
+
             }
                 .onAppear {
                 category = viewModel.categories.first
@@ -129,14 +136,9 @@ class AddTransctionViewModel: NSObject, ObservableObject, NSFetchedResultsContro
 
     init(storageProvider: StorageProvider) {
         self.storageProvider = storageProvider
-        let bankAccountsRequest: NSFetchRequest<BankAccount> = BankAccount.fetchRequest()
-        bankAccountsRequest.sortDescriptors = [NSSortDescriptor(keyPath: \BankAccount.name, ascending: false)]
-        self.fetchResultsControllerBankAccounts = NSFetchedResultsController(fetchRequest: bankAccountsRequest, managedObjectContext: storageProvider.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
 
-        let categoriesFetchRequest: NSFetchRequest<Category> = Category.fetchRequest()
-        categoriesFetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \Category.name, ascending: false)]
-
-        self.fetchResultsControllerCategories = NSFetchedResultsController(fetchRequest: categoriesFetchRequest, managedObjectContext: storageProvider.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        self.fetchResultsControllerBankAccounts = storageProvider.getBankAccountNSFetchedResultsController()
+        self.fetchResultsControllerCategories = storageProvider.getCategoryNSFetchedResultsController()
 
         super.init()
 

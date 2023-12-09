@@ -15,10 +15,15 @@ struct CategoriesView: View {
         NavigationStack {
             List {
                 ForEach(viewModel.categories) { category in
-                    Text(category.sanitisedName)
+                    NavigationLink(destination: CategoryDetailsView(viewModel: CategoryDetailsViewModel(category: category, storageProvider: viewModel.storageProvider))) {
+                        Text(category.sanitisedName)
+                    }
                 }
+                .onDelete(perform: viewModel.delete)
             }
         }
+        .navigationTitle("Categories")
+        .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showSheet) {
             AddCategoryView(viewModel: AddCategoryViewModel(storageProvider: viewModel.storageProvider))
         }
@@ -40,10 +45,8 @@ class CategoriesViewModel: NSObject, ObservableObject, NSFetchedResultsControlle
     
     init(storageProvider: StorageProvider) {
         self.storageProvider = storageProvider
-        let categoriesFetchRequest = Category.fetchRequest()
-        categoriesFetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \Category.name, ascending: false)]
         
-        self.fetchResultsController = NSFetchedResultsController(fetchRequest: categoriesFetchRequest, managedObjectContext: storageProvider.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        self.fetchResultsController = storageProvider.getCategoryNSFetchedResultsController()
         
         super.init()
         
@@ -54,5 +57,12 @@ class CategoriesViewModel: NSObject, ObservableObject, NSFetchedResultsControlle
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         categories = fetchResultsController.fetchedObjects ?? []
+    }
+    
+    func delete(_ offsets: IndexSet) {
+        for offset in offsets {
+            let item = categories[offset]
+            storageProvider.delete(item)
+        }
     }
 }

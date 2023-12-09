@@ -69,9 +69,8 @@ class AddCategoryViewModel: NSObject, ObservableObject, NSFetchedResultsControll
 
     init(storageProvider: StorageProvider) {
         self.storageProvider = storageProvider
-        let categoryRequest: NSFetchRequest<Category> = Category.fetchRequest()
-        categoryRequest.sortDescriptors = [NSSortDescriptor(keyPath: \Category.name, ascending: false)]
-        self.fetchResultsController = NSFetchedResultsController(fetchRequest: categoryRequest, managedObjectContext: storageProvider.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        
+        self.fetchResultsController = storageProvider.getCategoryNSFetchedResultsController()
         super.init()
 
         fetchResultsController.delegate = self

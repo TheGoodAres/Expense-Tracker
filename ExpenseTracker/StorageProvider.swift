@@ -30,7 +30,7 @@ class StorageProvider: ObservableObject {
 }
 
 extension StorageProvider {
-    func addTransaction(bankAccount: BankAccount, type: TransactionType, category: Category, amount: Double, date: Date, merchantName: String, note: String, categoryOn: Bool) {
+    func addTransaction(bankAccount: BankAccount, type: TransactionType, category: Category?, amount: Double, date: Date, merchantName: String, note: String, categoryOn: Bool) {
         let transaction = Transaction(context: persistentContainer.viewContext)
         transaction.bankAccount = bankAccount
         transaction.type = type
@@ -40,7 +40,11 @@ extension StorageProvider {
         transaction.amount = amount
         transaction.date = date
         transaction.merchant = merchantName
-
+        if type == .expense {
+            bankAccount.currentBalance -= amount
+        } else {
+            bankAccount.currentBalance += amount
+        }
         save()
 
     }
@@ -48,6 +52,7 @@ extension StorageProvider {
         let bankAccount = BankAccount(context: persistentContainer.viewContext)
         bankAccount.name = name
         bankAccount.initialBalance = initialBalance
+        bankAccount.currentBalance = initialBalance
         bankAccount.typeRaw = type
        save()
     }
@@ -151,6 +156,13 @@ extension StorageProvider {
     
     func delete(_ object: NSManagedObject) {
         objectWillChange.send()
+        if let  item = object as? Transaction {
+            if item.type == .expense {
+                item.bankAccount?.currentBalance += item.amount
+            } else {
+                item.bankAccount?.currentBalance -= item.amount
+            }
+        }
         persistentContainer.viewContext.delete(object)
         save()
     }
@@ -178,4 +190,22 @@ extension StorageProvider {
         objectWillChange.send()
     }
     
+    func getCategoryNSFetchedResultsController() -> NSFetchedResultsController<Category> {
+        let categoriesFetchRequest = Category.fetchRequest()
+        categoriesFetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \Category.name, ascending: false)]
+        
+        return NSFetchedResultsController(fetchRequest: categoriesFetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+    }
+    func getTransactionNSFetchedResultsController() -> NSFetchedResultsController<Transaction> {
+        let fetchRequest: NSFetchRequest<Transaction> = Transaction.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \Transaction.date, ascending: false)]
+        return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+    }
+    
+    func getBankAccountNSFetchedResultsController() -> NSFetchedResultsController<BankAccount> {
+        let request: NSFetchRequest<BankAccount> = BankAccount.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \BankAccount.name, ascending: false)]
+
+       return NSFetchedResultsController(fetchRequest: request, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+    }
 }

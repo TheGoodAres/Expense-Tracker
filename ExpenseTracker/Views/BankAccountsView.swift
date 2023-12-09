@@ -22,7 +22,7 @@ struct BankAccountsView: View {
                             Text(bankAccount.name ?? "Not known")
                         }
                     }
-                    .onDelete(perform: viewModel.delete)
+                        .onDelete(perform: viewModel.delete)
                 }
                 HStack {
                     Button {
@@ -31,38 +31,37 @@ struct BankAccountsView: View {
                         Text("Add Data!")
                     }
                     Spacer()
-                    
+
                     Button {
                         viewModel.storageProvider.deleteAll()
                     } label: {
                         Text("Delete All")
                     }
                 }
-                .sheet(isPresented: $isShowingAddBankAccountSheet) {
+                    .sheet(isPresented: $isShowingAddBankAccountSheet) {
                     AddBankAccountView()
                 }
             }
-            .toolbar {
+                .toolbar {
                 Button {
                     isShowingAddBankAccountSheet.toggle()
                 } label: {
                     Image(systemName: "plus.circle")
                 }
             }
+                .navigationTitle("Bank Accounts")
+                .navigationBarTitleDisplayMode(.inline)
         }
-    }}
+    } }
 
-class BankAccountsViewModel: NSObject, ObservableObject {
-    
+class BankAccountsViewModel: NSObject, ObservableObject, NSFetchedResultsControllerDelegate {
+
     @Published var bankAccounts = [BankAccount]()
     let storageProvider: StorageProvider
     private let fetchResultsController: NSFetchedResultsController<BankAccount>
     init(storageProvider: StorageProvider) {
         self.storageProvider = storageProvider
-        let request: NSFetchRequest<BankAccount> = BankAccount.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \BankAccount.name, ascending: false)]
-
-        self.fetchResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: storageProvider.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        self.fetchResultsController = storageProvider.getBankAccountNSFetchedResultsController()
 
         super.init()
 
@@ -75,20 +74,18 @@ class BankAccountsViewModel: NSObject, ObservableObject {
     func addData() {
         storageProvider.mockBankAccount()
     }
-    
+
     func delete(_ offsets: IndexSet) {
         for offset in offsets {
             let item = bankAccounts[offset]
             storageProvider.delete(item)
         }
     }
-}
-
-extension BankAccountsViewModel: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         DispatchQueue.main.async {
             self.bankAccounts = controller.fetchedObjects as? [BankAccount] ?? []
         }
     }
 }
+
 

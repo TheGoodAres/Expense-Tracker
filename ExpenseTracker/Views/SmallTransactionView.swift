@@ -19,11 +19,13 @@ struct SmallTransactionView: View {
                     Text("\(transaction.sanitisedAmount.formatted()) £")
                         .font(.subheadline)
                 }
-                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                 Spacer()
-                Text(transaction.category?.name ?? "No name category")
+                Text(transaction.category?.name ?? "Uncategorized")
                 Spacer()
-                Text(transaction.sanitisedDate)
+                VStack {
+                    Text(transaction.bankAccountName)
+                    Text(transaction.sanitisedDate)
+                }
             }
         }
     }

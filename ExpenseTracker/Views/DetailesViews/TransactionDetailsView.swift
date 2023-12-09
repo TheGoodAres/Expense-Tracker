@@ -51,9 +51,6 @@ struct TransactionDetailsView: View {
                             VStack(alignment:.leading){
                                 Text("Note")
                                 Text(note)
-                                    .background {
-                                        Color.primary.opacity(0.1)
-                                    }
                                     .frame(maxWidth: .infinity)
                                     .background {
                                         Color.primary.opacity(0.1)
@@ -103,7 +100,7 @@ struct TransactionDetailsView: View {
     }
 }
 
-class TransactionDetailsViewModel: NSObject, ObservableObject {
+class TransactionDetailsViewModel: NSObject, ObservableObject, NSFetchedResultsControllerDelegate {
     @Published var bankAccounts = [BankAccount]()
     @Published var categories = [Category]()
     var transaction: Transaction
@@ -114,13 +111,8 @@ class TransactionDetailsViewModel: NSObject, ObservableObject {
     init(storageProvider: StorageProvider, transaction: Transaction) {
         self.storageProvider = storageProvider
         self.transaction = transaction
-        let categoriesFetchRequest = Category.fetchRequest()
-        let bankAccountFetchRequest = BankAccount.fetchRequest()
-        categoriesFetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \Category.name, ascending: false)]
-        bankAccountFetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \BankAccount.name, ascending: false)]
-
-        self.categoriesFetchResultsController = NSFetchedResultsController(fetchRequest: categoriesFetchRequest, managedObjectContext: storageProvider.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        self.bankAccountFetchResultsController = NSFetchedResultsController(fetchRequest: bankAccountFetchRequest, managedObjectContext: storageProvider.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        self.categoriesFetchResultsController = storageProvider.getCategoryNSFetchedResultsController()
+        self.bankAccountFetchResultsController = storageProvider.getBankAccountNSFetchedResultsController()
 
         super.init()
 
@@ -145,9 +137,7 @@ class TransactionDetailsViewModel: NSObject, ObservableObject {
         transaction.note = note
         storageProvider.save()
     }
-}
-
-extension TransactionDetailsViewModel: NSFetchedResultsControllerDelegate {
+    
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
 
         if controller == categoriesFetchResultsController {

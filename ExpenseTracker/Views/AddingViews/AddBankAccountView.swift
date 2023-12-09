@@ -9,12 +9,14 @@ import SwiftUI
 import Combine
 
 struct AddBankAccountView: View {
+    @Environment(\.dismiss) var dismiss
     @EnvironmentObject var storageProvider: StorageProvider
     @State var bankAccountName = ""
     @State var initialBalance = ""
     @FocusState var initialBalanceIsActive: Bool
     @FocusState var accountNameIsActive: Bool
     @State var type: BankAccountType = .debit
+    @State var showBankAccountAlreadyExists = false
     var body: some View {
         NavigationView{
             Form {
@@ -60,10 +62,16 @@ struct AddBankAccountView: View {
                         if storageProvider.checkUniqueBankAccount(accountName: bankAccountName) {
                             print("New account added: \(bankAccountName)")
                             storageProvider.addBankAccount(name: bankAccountName, initialBalance: Double(initialBalance) ?? 0, type: type.rawValue)
+                            showBankAccountAlreadyExists = false
+                            dismiss()
                         } else {
-                            print("\(bankAccountName) already exists")
+                            showBankAccountAlreadyExists = true
                         }
                     }
+                }
+                if showBankAccountAlreadyExists {
+                    Text("A bank account with this name already exists, please try another!")
+                        .foregroundStyle(Color.red)
                 }
             }
             .toolbar {
