@@ -26,47 +26,49 @@ struct TransactionDetailsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                
-                    if (!editing) {
-                            VStack {
-                                Text("Merchant: \(viewModel.transaction.sanitisedMerchant)")
-                            }
-                            VStack{
-                                Text("Amount: \(viewModel.transaction.amount)")
-                            }
-                            VStack{
-                                Text("Date: \(viewModel.transaction.sanitisedDate)")
-                            }
-                            VStack{
-                                Text("Bank Account: \(viewModel.transaction.bankAccountName)")
-                            }
-                            VStack{
-                                if let category = viewModel.transaction.category {
-                                    Text("Category:\(category.sanitisedName)")
-                                } else {
-                                    Text("Uncategorized")
-                                }
-                            }
-                        if let note = viewModel.transaction.note {
-                            VStack(alignment:.leading){
-                                Text("Note")
-                                Text(note)
-                                    .frame(maxWidth: .infinity)
-                                    .background {
-                                        Color.primary.opacity(0.1)
-                                    }
+
+                if (!editing) {
+                    VStack {
+                        Text("Merchant: \(viewModel.transaction.sanitisedMerchant)")
+                    }
+                    VStack {
+                        Text("Amount: \(viewModel.transaction.amount)")
+                    }
+                    VStack {
+                        Text("Date: \(viewModel.transaction.sanitisedDate)")
+                    }
+                    VStack {
+                        Text("Bank Account: \(viewModel.transaction.bankAccountName)")
+                    }
+                    VStack {
+                        if let category = viewModel.transaction.category {
+                            Text("Category:\(category.sanitisedName)")
+                        } else {
+                            Text("Uncategorized")
+                        }
+                    }
+                    if let note = viewModel.transaction.note {
+                        VStack(alignment: .leading) {
+                            Text("Note")
+                            Text(note)
+                                .frame(maxWidth: .infinity)
+                                .background {
+                                Color.primary.opacity(0.1)
                             }
                         }
-                        
-                    } else {
-                            EditTransactionView(transaction: $viewModel.transaction, transactionDate: $transactionDate, transactionMerchant: $transactionMerchant, transactionNote: $transactionNote, type: $type, transactionAmount: $transactionAmount, bankAccount: $bankAccount, category: $category, categoryOn: $categoryOn, bankAccounts: $viewModel.bankAccounts, categories: $viewModel.categories)
-                            
-                        
                     }
-                
+
+                } else {
+                    EditTransactionView(transaction: $viewModel.transaction, transactionDate: $transactionDate, transactionMerchant: $transactionMerchant, transactionNote: $transactionNote, type: $type, transactionAmount: $transactionAmount, bankAccount: $bankAccount, category: $category, categoryOn: $categoryOn, bankAccounts: $viewModel.bankAccounts, categories: $viewModel.categories)
+
+
+                }
+
             }
-            .navigationTitle(editing ? "Edit Transaction" : "Transaction Details")
-            .navigationBarTitleDisplayMode(.inline)
+                .navigationTitle(editing ? "Edit Transaction" : "Transaction Details")
+            #if os(iOS)
+                .navigationBarTitleDisplayMode(.inline)
+            #endif
             .onChange(of: editing) { oldValue, newValue in
                 if (editing == false) {
                     viewModel.updateTransaction(bankAccount: bankAccount!, type: type, category: category!, amount: Double(transactionAmount) ?? 0.0, date: transactionDate, merchantName: transactionMerchant, note: transactionNote, categoryOn: categoryOn)
@@ -87,13 +89,13 @@ struct TransactionDetailsView: View {
                     }
                 }
             }
-            .toolbar {
+                .toolbar {
                 Button {
                     editing.toggle()
                 } label: {
                     Text(editing ? "Done" : "Edit")
                 }
-                
+
             }
         }
 
@@ -137,7 +139,7 @@ class TransactionDetailsViewModel: NSObject, ObservableObject, NSFetchedResultsC
         transaction.note = note
         storageProvider.save()
     }
-    
+
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
 
         if controller == categoriesFetchResultsController {

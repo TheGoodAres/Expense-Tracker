@@ -16,18 +16,22 @@ struct SmallTransactionView: View {
                 VStack(alignment: .leading) {
                     Text(transaction.merchant ?? "No Merchant")
                         .font(.headline)
+                        .bold()
                     Text("\(transaction.sanitisedAmount.formatted()) £")
                         .font(.subheadline)
                 }
+                .frame(minWidth: 0, maxWidth: .infinity)
                 Spacer()
                 Text(transaction.category?.name ?? "Uncategorized")
+                    .frame(minWidth: 0, maxWidth: .infinity)
                 Spacer()
-                VStack {
+                VStack(alignment: .leading) {
                     Text(transaction.bankAccountName)
                     Text(transaction.sanitisedDate)
                 }
+                .frame(minWidth: 0, maxWidth: .infinity)
             }
         }
-    }
+        .background(transaction.type == .expense ? Color.red : Color.green)    }
 }
 

@@ -14,7 +14,7 @@ struct ViewTransactions: View {
     var body: some View {
         NavigationStack {
             List {
-                ForEach(viewModel.transactions.filter{
+                ForEach(viewModel.transactions.filter {
                     if let categoryName = $0.category?.sanitisedName {
                         $0.bankAccountName.contains(searchText) || $0.sanitisedMerchant.contains(searchText) || String($0.sanitisedAmount).contains(searchText) || $0.sanitisedDate.contains(searchText) || searchText == "" || categoryName.contains(searchText) }
                     else {
@@ -22,26 +22,29 @@ struct ViewTransactions: View {
                     }
                 }) { transaction in
                     SmallTransactionView(transaction: transaction)
+                        .listRowBackground(transaction.type == .expense ? Color.red : Color.green)
                 }
-                .onDelete(perform: viewModel.delete)
+                    .onDelete(perform: viewModel.delete)
             }
-            .navigationTitle("Transactions")
-            .navigationBarTitleDisplayMode(.inline)
-            
+                .navigationTitle("Transactions")
+            #if os(iOS)
+                .navigationBarTitleDisplayMode(.inline)
+            #endif
+
         }
-        .searchable(text: $searchText)
+            .searchable(text: $searchText)
     }
 }
 
 class ViewTransactionsModel: NSObject, ObservableObject {
     @Published var transactions = [Transaction]()
-    
+
     let storageProvider: StorageProvider
     private let fetchResultsControler: NSFetchedResultsController<Transaction>
     init(storageProvider: StorageProvider) {
         self.storageProvider = storageProvider
 
-        
+
         self.fetchResultsControler = storageProvider.getTransactionNSFetchedResultsController()
         super.init()
 
@@ -49,11 +52,11 @@ class ViewTransactionsModel: NSObject, ObservableObject {
         try! fetchResultsControler.performFetch()
         transactions = fetchResultsControler.fetchedObjects ?? []
     }
-    
+
     func delete(_ offsets: IndexSet) {
         for offset in offsets {
             let item = transactions[offset]
-            
+
             storageProvider.delete(item)
         }
     }
@@ -62,7 +65,7 @@ class ViewTransactionsModel: NSObject, ObservableObject {
 extension ViewTransactionsModel: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         DispatchQueue.main.async {
-            
+
             self.transactions = controller.fetchedObjects as? [Transaction] ?? []
         }
     }

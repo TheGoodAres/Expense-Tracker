@@ -9,7 +9,7 @@ import SwiftUI
 import CoreData
 struct AddCategoryView: View {
     @Environment(\.dismiss) var dismiss
-    @State var viewModel: AddCategoryViewModel
+    @ObservedObject var viewModel: AddCategoryViewModel
     @State var categoryName = ""
     @State var hasParentCategory = true
     @State var parentCategory : Category?
@@ -78,4 +78,9 @@ class AddCategoryViewModel: NSObject, ObservableObject, NSFetchedResultsControll
         categories = fetchResultsController.fetchedObjects ?? []
     }
 
+}
+
+struct checkBoxCategory {
+    let category: Category
+    let isOn = false
 }

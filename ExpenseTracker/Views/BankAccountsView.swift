@@ -11,46 +11,49 @@ import CoreData
 struct BankAccountsView: View {
     @ObservedObject var viewModel: BankAccountsViewModel
     @State var isShowingAddBankAccountSheet = false
+    @Binding var selectedTab: Int
     var body: some View {
         NavigationStack {
-            VStack {
-                List {
-                    ForEach(viewModel.bankAccounts) { bankAccount in
-                        NavigationLink {
-                            BankAccountDetailsView(viewModel: BankAccountDetailsViewModel(bankAccount: bankAccount, storageProvider: viewModel.storageProvider))
-                        } label: {
-                            Text(bankAccount.name ?? "Not known")
-                        }
-                    }
-                        .onDelete(perform: viewModel.delete)
-                }
-                HStack {
-                    Button {
-                        viewModel.addData()
+            List {
+                ForEach(viewModel.bankAccounts) { bankAccount in
+                    NavigationLink {
+                        BankAccountDetailsView(viewModel: BankAccountDetailsViewModel(bankAccount: bankAccount, storageProvider: viewModel.storageProvider))
                     } label: {
-                        Text("Add Data!")
-                    }
-                    Spacer()
-
-                    Button {
-                        viewModel.storageProvider.deleteAll()
-                    } label: {
-                        Text("Delete All")
+                        Text(bankAccount.name ?? "Not known")
                     }
                 }
-                    .sheet(isPresented: $isShowingAddBankAccountSheet) {
-                    AddBankAccountView()
-                }
+                    .onDelete(perform: viewModel.delete)
+            }
+//                HStack {
+//                    Button {
+//                        viewModel.addData()
+//                    } label: {
+//                        Text("Add Data!")
+//                    }
+//                    Spacer()
+//
+//                    Button {
+//                        viewModel.storageProvider.deleteAll()
+//                    } label: {
+//                        Text("Delete All")
+//                    }
+//                }
+            .sheet(isPresented: $isShowingAddBankAccountSheet) {
+                AddBankAccountView()
             }
                 .toolbar {
-                Button {
-                    isShowingAddBankAccountSheet.toggle()
-                } label: {
-                    Image(systemName: "plus.circle")
+                if selectedTab == 1 {
+                    Button {
+                        isShowingAddBankAccountSheet.toggle()
+                    } label: {
+                        Image(systemName: "plus.circle")
+                    }
                 }
             }
                 .navigationTitle("Bank Accounts")
+            #if os(iOS)
                 .navigationBarTitleDisplayMode(.inline)
+            #endif
         }
     } }
 

@@ -22,6 +22,7 @@
 		D48F8C342B1C8BB900DE995C /* BankAccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48F8C332B1C8BB900DE995C /* BankAccountsView.swift */; };
 		D48F8C362B1C997400DE995C /* AddTransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48F8C352B1C997400DE995C /* AddTransactionView.swift */; };
 		D4BDFABE2B121BD600E75814 /* ExpenseTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D4BDFABC2B121BD600E75814 /* ExpenseTracker.xcdatamodeld */; };
+		D4C7AE192B24B6A6009F3BC6 /* ViewTransactionsToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C7AE182B24B6A6009F3BC6 /* ViewTransactionsToolbar.swift */; };
 		D4D9781A2B0817D60029EB65 /* ExpenseTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D978192B0817D60029EB65 /* ExpenseTrackerApp.swift */; };
 		D4D9781C2B0817D60029EB65 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D9781B2B0817D60029EB65 /* ContentView.swift */; };
 		D4D9781E2B0817D70029EB65 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4D9781D2B0817D70029EB65 /* Assets.xcassets */; };
@@ -49,6 +50,7 @@
 		D48F8C332B1C8BB900DE995C /* BankAccountsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankAccountsView.swift; sourceTree = "<group>"; };
 		D48F8C352B1C997400DE995C /* AddTransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransactionView.swift; sourceTree = "<group>"; };
 		D4BDFABD2B121BD600E75814 /* ExpenseTracker.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ExpenseTracker.xcdatamodel; sourceTree = "<group>"; };
+		D4C7AE182B24B6A6009F3BC6 /* ViewTransactionsToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewTransactionsToolbar.swift; sourceTree = "<group>"; };
 		D4D978162B0817D60029EB65 /* ExpenseTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExpenseTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4D978192B0817D60029EB65 /* ExpenseTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseTrackerApp.swift; sourceTree = "<group>"; };
 		D4D9781B2B0817D60029EB65 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -159,6 +161,7 @@
 				D4EB794F2B21C368005C5C18 /* DetailesViews */,
 				D4EB794E2B21C349005C5C18 /* AddingViews */,
 				D4FAB60F2B1BF14B00A18E00 /* ViewTransactions.swift */,
+				D4C7AE182B24B6A6009F3BC6 /* ViewTransactionsToolbar.swift */,
 				D48F8C312B1C7E5500DE995C /* SettingsView.swift */,
 				D48F8C332B1C8BB900DE995C /* BankAccountsView.swift */,
 				D467C3A32B1E791F003F1D82 /* DashboardView.swift */,
@@ -257,6 +260,7 @@
 				D40A21522B1F82AA00EFABF2 /* CategoryExtension.swift in Sources */,
 				D438AD442B1BD0E1009C9C8E /* BankAccountExtensions.swift in Sources */,
 				D40A21542B1F84F000EFABF2 /* TransactionDetailsView.swift in Sources */,
+				D4C7AE192B24B6A6009F3BC6 /* ViewTransactionsToolbar.swift in Sources */,
 				D42A78A72B1271F100D0E87F /* StorageProvider.swift in Sources */,
 				D41120392B22586000EEBBF7 /* EditTransactionView.swift in Sources */,
 			);
@@ -393,6 +397,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ExpenseTracker/Info.plist;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Used to unlock your data";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -432,6 +437,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ExpenseTracker/Info.plist;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Used to unlock your data";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;

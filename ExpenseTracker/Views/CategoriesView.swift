@@ -9,7 +9,7 @@ import SwiftUI
 import CoreData
 struct CategoriesView: View {
 
-    @State var viewModel: CategoriesViewModel
+    @ObservedObject var viewModel: CategoriesViewModel
     @State var showSheet = false
     var body: some View {
         NavigationStack {
@@ -19,15 +19,17 @@ struct CategoriesView: View {
                         Text(category.sanitisedName)
                     }
                 }
-                .onDelete(perform: viewModel.delete)
+                    .onDelete(perform: viewModel.delete)
             }
         }
-        .navigationTitle("Categories")
-        .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle("Categories")
+        #if os(iOS)
+            .navigationBarTitleDisplayMode(.inline)
+        #endif
         .sheet(isPresented: $showSheet) {
             AddCategoryView(viewModel: AddCategoryViewModel(storageProvider: viewModel.storageProvider))
         }
-        .toolbar{
+            .toolbar {
             Button {
                 showSheet.toggle()
             } label: {
@@ -42,23 +44,23 @@ class CategoriesViewModel: NSObject, ObservableObject, NSFetchedResultsControlle
     @Published var categories = [Category]()
     let storageProvider: StorageProvider
     let fetchResultsController: NSFetchedResultsController<Category>
-    
+
     init(storageProvider: StorageProvider) {
         self.storageProvider = storageProvider
-        
+
         self.fetchResultsController = storageProvider.getCategoryNSFetchedResultsController()
-        
+
         super.init()
-        
+
         fetchResultsController.delegate = self
         try! fetchResultsController.performFetch()
         categories = fetchResultsController.fetchedObjects ?? []
     }
-    
+
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         categories = fetchResultsController.fetchedObjects ?? []
     }
-    
+
     func delete(_ offsets: IndexSet) {
         for offset in offsets {
             let item = categories[offset]

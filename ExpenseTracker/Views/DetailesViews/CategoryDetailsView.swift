@@ -9,10 +9,10 @@ import SwiftUI
 import CoreData
 
 struct CategoryDetailsView: View {
-    @State var viewModel: CategoryDetailsViewModel
+    @ObservedObject var viewModel: CategoryDetailsViewModel
     var body: some View {
         NavigationStack {
-            Form{
+            Form {
                 HStack {
                     Text("Category name: ")
                     Text(viewModel.category.sanitisedName)
@@ -26,14 +26,16 @@ struct CategoryDetailsView: View {
                     }
                 }
             }
-            .navigationTitle("Category")
-            .navigationBarTitleDisplayMode(.inline)
+                .navigationTitle("Category")
+            #if os(iOS)
+                .navigationBarTitleDisplayMode(.inline)
+            #endif
         }
     }
 }
 
 
-class CategoryDetailsViewModel: NSObject, ObservableObject, NSFetchedResultsControllerDelegate{
+class CategoryDetailsViewModel: NSObject, ObservableObject, NSFetchedResultsControllerDelegate {
     let storageProvider: StorageProvider
     var categories = [Category]()
     let category: Category
@@ -42,15 +44,15 @@ class CategoryDetailsViewModel: NSObject, ObservableObject, NSFetchedResultsCont
         self.category = category
         self.storageProvider = storageProvider
         fetchResultsController = storageProvider.getCategoryNSFetchedResultsController()
-        
+
         super.init()
-        
+
         fetchResultsController.delegate = self
         try! fetchResultsController.performFetch()
         categories = fetchResultsController.fetchedObjects ?? []
-        
+
     }
-    
+
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         categories = fetchResultsController.fetchedObjects ?? []
     }

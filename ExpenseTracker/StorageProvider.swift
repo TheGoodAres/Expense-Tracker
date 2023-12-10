@@ -18,18 +18,16 @@ class StorageProvider: ObservableObject {
         persistentContainer.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
         persistentContainer.persistentStoreDescriptions.first?.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
         NotificationCenter.default.addObserver(forName: .NSPersistentStoreRemoteChange, object: persistentContainer.persistentStoreCoordinator, queue: .main, using: remoteStoreChanged)
-        
-        
+
+
         persistentContainer.loadPersistentStores(completionHandler: { description, error in
             if let error = error {
                 fatalError("CoreData failed to load with error: \(error)")
             }
         })
-        
-    }
-}
 
-extension StorageProvider {
+    }
+
     func addTransaction(bankAccount: BankAccount, type: TransactionType, category: Category?, amount: Double, date: Date, merchantName: String, note: String, categoryOn: Bool) {
         let transaction = Transaction(context: persistentContainer.viewContext)
         transaction.bankAccount = bankAccount
@@ -54,7 +52,7 @@ extension StorageProvider {
         bankAccount.initialBalance = initialBalance
         bankAccount.currentBalance = initialBalance
         bankAccount.typeRaw = type
-       save()
+        save()
     }
     func addCategory(name: String, parentCategory: Category?) {
         let category = Category(context: persistentContainer.viewContext)
@@ -140,9 +138,9 @@ extension StorageProvider {
         }
     }
     func save() {
-        if persistentContainer.viewContext.hasChanges{
+        if persistentContainer.viewContext.hasChanges {
             do {
-                
+
                 try persistentContainer.viewContext.save()
                 print("Success")
             } catch {
@@ -153,10 +151,10 @@ extension StorageProvider {
             print("Had no changes")
         }
     }
-    
+
     func delete(_ object: NSManagedObject) {
         objectWillChange.send()
-        if let  item = object as? Transaction {
+        if let item = object as? Transaction {
             if item.type == .expense {
                 item.bankAccount?.currentBalance += item.amount
             } else {
@@ -166,7 +164,7 @@ extension StorageProvider {
         persistentContainer.viewContext.delete(object)
         save()
     }
-    
+
     private func delete(_ fetchRequest: NSFetchRequest<NSFetchRequestResult>) {
         let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
         batchDeleteRequest.resultType = .resultTypeObjectIDs
@@ -185,15 +183,15 @@ extension StorageProvider {
         delete(request3)
         save()
     }
-    
+
     func remoteStoreChanged(_ notification: Notification) {
         objectWillChange.send()
     }
-    
+
     func getCategoryNSFetchedResultsController() -> NSFetchedResultsController<Category> {
         let categoriesFetchRequest = Category.fetchRequest()
         categoriesFetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \Category.name, ascending: false)]
-        
+
         return NSFetchedResultsController(fetchRequest: categoriesFetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
     }
     func getTransactionNSFetchedResultsController() -> NSFetchedResultsController<Transaction> {
@@ -201,11 +199,11 @@ extension StorageProvider {
         fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \Transaction.date, ascending: false)]
         return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
     }
-    
+
     func getBankAccountNSFetchedResultsController() -> NSFetchedResultsController<BankAccount> {
         let request: NSFetchRequest<BankAccount> = BankAccount.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(keyPath: \BankAccount.name, ascending: false)]
 
-       return NSFetchedResultsController(fetchRequest: request, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        return NSFetchedResultsController(fetchRequest: request, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
     }
 }
