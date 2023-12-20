@@ -21,6 +21,9 @@ struct SettingsView: View {
                         NavigationLink(destination: CategoriesView(viewModel: CategoriesViewModel(storageProvider: storageProvider))) {
                             Text("Categories")
                         }
+                        NavigationLink(destination: TestingView()) {
+                            Text("Test")
+                        }
 
                     }
                 }

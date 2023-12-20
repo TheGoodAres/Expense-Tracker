@@ -32,7 +32,7 @@ struct TransactionDetailsView: View {
                         Text("Merchant: \(viewModel.transaction.sanitisedMerchant)")
                     }
                     VStack {
-                        Text("Amount: \(viewModel.transaction.amount)")
+                        Text("Amount: \(viewModel.transaction.amount.formatted())")
                     }
                     VStack {
                         Text("Date: \(viewModel.transaction.sanitisedDate)")

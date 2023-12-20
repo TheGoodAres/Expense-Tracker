@@ -11,30 +11,43 @@ import Charts
 
 struct DashboardView: View {
     @ObservedObject var viewModel: DashboardViewModel
-    @State var pieChartData: [PieChartData] = [PieChartData]()
     var body: some View {
-        VStack{
-            Button("Change to \(viewModel.income ? "expense" : "income")") {
-                viewModel.income.toggle()
-                viewModel.getPieChartData()
-                
-            }
-            Chart {
-                ForEach(viewModel.pieChartData, id:\.name) { category in
-                    SectorMark(
-                        angle: .value("sum", category.sum),
-                        angularInset: 1
-                    )
-                    .foregroundStyle(by: .value("Test", category.name))
-                    .annotation(position: .overlay) {
-                        Text("\(category.sum.formatted())")
-                            .font(.headline)
-                            .foregroundStyle(.white)
-                    }
+        NavigationStack{
+            VStack{
+                Button("Change to \(viewModel.income ? "expense" : "income")") {
+                    viewModel.income.toggle()
+                    viewModel.getPieChartData()
                     
                 }
+                Chart {
+                    ForEach(viewModel.pieChartData, id:\.name) { category in
+                        SectorMark(
+                            angle: .value("sum", category.sum),
+                            angularInset: 0.5                        )
+                        .foregroundStyle(by: .value("Test", category.name))
+                        .annotation(position: .overlay) {
+                            if (category.sum > 0) {
+                                Text("\(category.sum.formatted())")
+                                    .font(.headline)
+                                    .foregroundStyle(.white)
+                            }
+                        }
+                    
+                    }
+                }
+                .frame(width: 300, height: 300)
+                List {
+                    ForEach(viewModel.pieChartData, id: \.name) {category in
+                        HStack {
+                            Text(category.name)
+                            Spacer()
+                            Text(category.sum.formatted())
+                            Text("")
+                        }
+                    }
+                }
             }
-            .frame(width: 300, height: 300)
+            .navigationTitle(viewModel.income ? "Income" : "Expense")
         }
     }
     
@@ -64,7 +77,6 @@ class DashboardViewModel: NSObject, ObservableObject, NSFetchedResultsController
         transactions = fetchedResultsControllerTransactions.fetchedObjects ?? []
         getPieChartData()
     }
-    
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         if controller == fetchedResultsControllerTransactions{
             self.transactions = controller.fetchedObjects as? [Transaction] ?? []

@@ -8,8 +8,19 @@
 import SwiftUI
 
 struct TestingView: View {
+    @EnvironmentObject var storageProvider: StorageProvider
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Button("Add Mock Data") {
+                storageProvider.mockBankAccount()
+            }
+            Button("Delete everythings") {
+                storageProvider.deleteAll()
+            }
+        }
+        
     }
 }
+
+
 

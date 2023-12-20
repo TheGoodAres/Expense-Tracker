@@ -206,4 +206,22 @@ class StorageProvider: ObservableObject {
 
         return NSFetchedResultsController(fetchRequest: request, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
     }
+    
+    func updateBalance(bankAccount: BankAccount) {
+        let fetchRequest : NSFetchRequest<Transaction> = Transaction.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "bankAccount == %@", bankAccount)
+        bankAccount.currentBalance = bankAccount.initialBalance
+        do {
+            let transactions = try persistentContainer.viewContext.fetch(fetchRequest)
+            for transaction in transactions {
+                if transaction.type == .expense {
+                    bankAccount.currentBalance -= transaction.amount
+                } else {
+                    bankAccount.currentBalance += transaction.amount
+                }
+            }
+        } catch {
+            print("Error: \(error)")
+        }
+    }
 }

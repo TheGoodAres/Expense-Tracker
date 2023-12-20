@@ -10,6 +10,7 @@ import CoreData
 
 struct CategoryDetailsView: View {
     @ObservedObject var viewModel: CategoryDetailsViewModel
+    @State var child = [Category]()
     var body: some View {
         NavigationStack {
             Form {
@@ -22,6 +23,20 @@ struct CategoryDetailsView: View {
                         Text("Parent Company: ")
                         NavigationLink(destination: CategoryDetailsView(viewModel: CategoryDetailsViewModel(category: parentCategory, storageProvider: viewModel.storageProvider))) {
                             Text(parentCategory.sanitisedName)
+                        }
+                    }
+                }
+                VStack {
+                    NavigationLink{ SelectChildCategoriesView(selectedCategories: $child, viewModel: SelectChildCategoriesViewModel(storageProvider: viewModel.storageProvider, category: viewModel.category)) } label:
+                    {
+                        Text("Here")
+                    }
+                    
+                    
+                    List{
+                        ForEach(child) { childCategory in
+                            Text(childCategory.sanitisedName)
+                            
                         }
                     }
                 }

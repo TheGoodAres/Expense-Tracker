@@ -14,10 +14,13 @@
 		D42A78A72B1271F100D0E87F /* StorageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42A78A62B1271F100D0E87F /* StorageProvider.swift */; };
 		D438AD422B1BC3DD009C9C8E /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = D438AD412B1BC3DD009C9C8E /* Types.swift */; };
 		D438AD442B1BD0E1009C9C8E /* BankAccountExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D438AD432B1BD0E1009C9C8E /* BankAccountExtensions.swift */; };
+		D43B360B2B32F774005B1A98 /* EditBankAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D43B360A2B32F774005B1A98 /* EditBankAccountView.swift */; };
 		D467C3A42B1E791F003F1D82 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D467C3A32B1E791F003F1D82 /* DashboardView.swift */; };
 		D46A6D672B2371C100C97EC5 /* CategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46A6D662B2371C100C97EC5 /* CategoriesView.swift */; };
 		D46A6D692B237EA400C97EC5 /* AddCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46A6D682B237EA400C97EC5 /* AddCategoryView.swift */; };
 		D46A6D6B2B238CB500C97EC5 /* CategoryDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46A6D6A2B238CB500C97EC5 /* CategoryDetailsView.swift */; };
+		D47EB8AA2B30DF9200CD0638 /* SelectChildCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47EB8A92B30DF9200CD0638 /* SelectChildCategoriesView.swift */; };
+		D47EB8AC2B30DFE200CD0638 /* TestingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47EB8AB2B30DFE200CD0638 /* TestingView.swift */; };
 		D48F8C322B1C7E5500DE995C /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48F8C312B1C7E5500DE995C /* SettingsView.swift */; };
 		D48F8C342B1C8BB900DE995C /* BankAccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48F8C332B1C8BB900DE995C /* BankAccountsView.swift */; };
 		D48F8C362B1C997400DE995C /* AddTransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48F8C352B1C997400DE995C /* AddTransactionView.swift */; };
@@ -42,10 +45,13 @@
 		D42A78A62B1271F100D0E87F /* StorageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageProvider.swift; sourceTree = "<group>"; };
 		D438AD412B1BC3DD009C9C8E /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 		D438AD432B1BD0E1009C9C8E /* BankAccountExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankAccountExtensions.swift; sourceTree = "<group>"; };
+		D43B360A2B32F774005B1A98 /* EditBankAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBankAccountView.swift; sourceTree = "<group>"; };
 		D467C3A32B1E791F003F1D82 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		D46A6D662B2371C100C97EC5 /* CategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesView.swift; sourceTree = "<group>"; };
 		D46A6D682B237EA400C97EC5 /* AddCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryView.swift; sourceTree = "<group>"; };
 		D46A6D6A2B238CB500C97EC5 /* CategoryDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDetailsView.swift; sourceTree = "<group>"; };
+		D47EB8A92B30DF9200CD0638 /* SelectChildCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectChildCategoriesView.swift; sourceTree = "<group>"; };
+		D47EB8AB2B30DFE200CD0638 /* TestingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingView.swift; sourceTree = "<group>"; };
 		D48F8C312B1C7E5500DE995C /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D48F8C332B1C8BB900DE995C /* BankAccountsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankAccountsView.swift; sourceTree = "<group>"; };
 		D48F8C352B1C997400DE995C /* AddTransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransactionView.swift; sourceTree = "<group>"; };
@@ -95,6 +101,9 @@
 		D4D9780D2B0817D60029EB65 = {
 			isa = PBXGroup;
 			children = (
+				D47EB8A92B30DF9200CD0638 /* SelectChildCategoriesView.swift */,
+				D47EB8AB2B30DFE200CD0638 /* TestingView.swift */,
+				D43B360A2B32F774005B1A98 /* EditBankAccountView.swift */,
 				D4D978182B0817D60029EB65 /* ExpenseTracker */,
 				D4D978172B0817D60029EB65 /* Products */,
 			);
@@ -242,11 +251,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				D4FAB6102B1BF14B00A18E00 /* ViewTransactions.swift in Sources */,
+				D43B360B2B32F774005B1A98 /* EditBankAccountView.swift in Sources */,
 				D4FAB60B2B1BE4EB00A18E00 /* BankAccountDetailsView.swift in Sources */,
 				D40A21562B20BC0B00EFABF2 /* SmallTransactionView.swift in Sources */,
 				D4D9781C2B0817D60029EB65 /* ContentView.swift in Sources */,
 				D467C3A42B1E791F003F1D82 /* DashboardView.swift in Sources */,
 				D4BDFABE2B121BD600E75814 /* ExpenseTracker.xcdatamodeld in Sources */,
+				D47EB8AA2B30DF9200CD0638 /* SelectChildCategoriesView.swift in Sources */,
 				D4D9781A2B0817D60029EB65 /* ExpenseTrackerApp.swift in Sources */,
 				D46A6D672B2371C100C97EC5 /* CategoriesView.swift in Sources */,
 				D48F8C322B1C7E5500DE995C /* SettingsView.swift in Sources */,
@@ -257,6 +268,7 @@
 				D438AD422B1BC3DD009C9C8E /* Types.swift in Sources */,
 				D4DF9D922B1D50530049D62B /* AddBankAccountView.swift in Sources */,
 				D48F8C362B1C997400DE995C /* AddTransactionView.swift in Sources */,
+				D47EB8AC2B30DFE200CD0638 /* TestingView.swift in Sources */,
 				D40A21522B1F82AA00EFABF2 /* CategoryExtension.swift in Sources */,
 				D438AD442B1BD0E1009C9C8E /* BankAccountExtensions.swift in Sources */,
 				D40A21542B1F84F000EFABF2 /* TransactionDetailsView.swift in Sources */,

@@ -13,7 +13,7 @@ struct ContentView: View {
     @EnvironmentObject var storageProvider: StorageProvider
     @State private var selection = 0
     @State private var isShown = false
-    @State private var isAuthenticated = false
+    @State private var isAuthenticated = true
     var body: some View {
         VStack {
 
@@ -53,7 +53,7 @@ struct ContentView: View {
                         .resizable()
                         .scaledToFit()
                 }
-                    .frame(width: 60, height: 60)
+                    .frame(width: 50, height: 50)
                     .clipShape(Circle())
             }
                 .ignoresSafeArea(.keyboard)
